@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./pages/index.css">
+  <title>Место</title>
+</head>
+<body>
+  <div class="page">
+    <!-- header -->
+    <header class="header page__section">
+      <img src="./images/Vector.svg" alt="вектор" class="header__img">
+    </header>
+    <main class="main page__section">
+      <!-- profile -->
+      <section class="profile">
+        <img src="./images/Avatar.svg" alt="аватар" class="profile__img">
+        <div class="profile__info">
+          <h1 class="profile__title">Жак-Ив Кусто</h1>
+          <button class="profile__edit page__button"></button>
+          <p class="profile__subtitle">Исследователь океана</p>
+        </div>
+        <button class="profile__add-button page__button">
+        </button>
+      </section>
+      <!-- elements -->
+      <section class="elements">
+        <article class="element">
+          <img src="./images/karachaevsk.png" alt="карачаевск" class="element__img">
+          <div class="element__sign">
+            <h2 class="element__title">Карачаевск</h2>
+            <input type="checkbox" id="like1" class="element__checkbox">
+            <label for="like1" class="element__like"></label>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/elbrus.png" alt="эльбрус" class="element__img">
+          <div class="element__sign">
+            <h2 class="element__title">Гора Эльбрус</h2>
+            <input type="checkbox" id="like2" class="element__checkbox">
+            <label for="like2" class="element__like"></label>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/dombai.png" alt="домбай" class="element__img">
+          <div class="element__sign">
+            <h2 class="element__title">Домбай</h2>
+            <input type="checkbox" id="like3" class="element__checkbox">
+            <label for="like3" class="element__like"></label>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/elbrus.png" alt="эльбрус" class="element__img">
+          <div class="element__sign">
+            <h2 class="element__title">Гора Эльбрус</h2>
+            <input type="checkbox" id="like4" class="element__checkbox">
+            <label for="like4" class="element__like"></label>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/dombai.png" alt="домбай" class="element__img">
+          <div class="element__sign">
+            <h2 class="element__title">Домбай</h2>
+            <input type="checkbox" id="like5" class="element__checkbox">
+            <label for="like5" class="element__like"></label>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/karachaevsk.png" alt="карачаевск" class="element__img">
+          <div class="element__sign">
+            <h2 class="element__title">Карачаево-Черкесск</h2>
+            <input type="checkbox" id="like6" class="element__checkbox">
+            <label for="like6" class="element__like"></label>
+          </div>
+        </article>
+      </section>
+      <!-- popup -->
+      <section class="popup popup_opened">
+        <div class="popup__container">
+          <button class="popup__close page__button"></button>
+          <h2 class="popup__title">Редактировать профиль</h2>
+          <input type="text" id="name" class="popup__text">
+          <input type="text" id="hobbie" class="popup__text">
+          <button class="popup__save">Сохранить</button>
+        </div>
+      </section>
+    </main>
+    <!-- footer -->
+    <footer class="footer page__section">
+      <p class="footer__text">&copy; 2020 Mesto Russia</p>
+    </footer>
+  </div>
+</body>
+
+</html>

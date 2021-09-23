@@ -1,0 +1,9 @@
+.element__checkbox {
+  display: none;
+}
+
+.element__checkbox:checked + .element__like {
+  background-image: url(../../../images/like-black.svg);
+  opacity: 1;
+}
+
