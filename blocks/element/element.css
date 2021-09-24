@@ -4,3 +4,10 @@
   background-color: #FFF;
   border-radius: 10px;
 }
+
+@media screen and (max-width:1023.98px) {
+
+  .element {
+    max-width: 307px;
+  }
+}

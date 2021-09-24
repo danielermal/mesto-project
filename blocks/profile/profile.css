@@ -4,3 +4,12 @@
   align-items: center;
   position: relative;
 }
+
+@media screen and (max-width: 767.98px) {
+  .profile {
+    max-width: 282px;
+    margin-top: 38.25px;
+    flex-direction: column;
+    min-height: 286px;
+  }
+}

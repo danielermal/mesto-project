@@ -1,5 +1,6 @@
 .page__button {
   transition: opacity linear 0.2s;
+  cursor: pointer;
 }
 
 .page__button:hover {

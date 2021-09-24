@@ -9,3 +9,10 @@
   overflow: hidden;
   max-width: 190px;
 }
+
+@media screen and (max-width:1023.98px) {
+
+  .element__title {
+    max-width: 205px;
+  }
+}

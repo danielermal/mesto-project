@@ -10,3 +10,11 @@
   flex-direction: column;
   box-sizing: border-box;
 }
+
+@media screen and (max-width: 767.98px) {
+
+  .popup__container {
+    width: 282px;
+    min-height: 322px;
+  }
+}

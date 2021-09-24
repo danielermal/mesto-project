@@ -1,6 +1,21 @@
 .page__section {
   max-width: 880px;
-  padding-left: 30px;
-  padding-right: 30px;
   margin: 0 auto;
+}
+
+@media screen and (max-width: 1023.98px) {
+
+  .page__section {
+    max-width: 644px;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+
+  .page__section {
+    max-width: 320px;
+
+  }
 }
