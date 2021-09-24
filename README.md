@@ -1,7 +1,7 @@
 # Проект: Место
 
 ### Обзор
-
+* [Ссылка на проект в GitPages](https://danielermal.github.io/mesto-project/)
 * Figma
 * Картинки
 
