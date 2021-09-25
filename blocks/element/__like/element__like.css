@@ -5,10 +5,14 @@
   width: 22px;
   height: 19px;
   cursor: pointer;
+  border: none;
+  background-size: cover;
 }
 
 .element__like:hover {
   opacity: 0.5;
 }
 
-
+.element__like:active {
+  background-image: url(../../../images/like-black.svg);
+}

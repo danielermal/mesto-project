@@ -1,12 +1,15 @@
 .profile {
   margin: 40px auto 0;
-  display: flex;
+  display: grid;
+  grid-template-rows: repeat(1, minmax(min-content, max-content));
+  grid-template-columns: repeat(3, minmax(min-content, max-content));
   align-items: center;
-  position: relative;
+  justify-content: space-between;
 }
 
 @media screen and (max-width: 767.98px) {
   .profile {
+    display: flex;
     max-width: 282px;
     margin-top: 38.25px;
     flex-direction: column;

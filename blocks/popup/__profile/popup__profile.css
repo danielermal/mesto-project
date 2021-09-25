@@ -1,0 +1,11 @@
+.popup__profile {
+  margin: 0 auto;
+  max-width: 358px;
+}
+
+@media screen and (max-width: 767.98px) {
+
+  .popup__profile {
+    max-width: 238px;
+  }
+}
