@@ -1,8 +1,21 @@
 .element__img {
   margin: 0;
   width: 100%;
-  min-height: 282px;
-  max-height: 320px;
+  height: 282px;
   border-radius: 10px 10px 0px 0px;
+  object-fit: cover;
 }
 
+@media screen and (max-width:1023.98px) {
+
+  .element__img {
+    height: 320px;
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+
+  .element__img {
+    height: 282px;
+  }
+}

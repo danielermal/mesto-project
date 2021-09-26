@@ -79,11 +79,11 @@
           <!-- popup -->
     <div class="popup">
         <div class="popup__container">
-          <button class="popup__close page__button" type="reset"></button>
+          <button class="popup__close page__button" type="button"></button>
           <h2 class="popup__title">Редактировать профиль</h2>
-          <form name="profile" class="popup__profile">
-            <input type="text" id="name" value="Жак-Ив Кусто" class="popup__text" required>
-            <input type="text" id="hobbie" class="popup__text" value="Исследователь океана" required>
+          <form name="profile" class="popup__form">
+            <input type="text" name="name" id="name" value="Жак-Ив Кусто" class="popup__text" required>
+            <input type="text" name="hobbie" id="hobbie" class="popup__text" value="Исследователь океана" required>
             <button class="popup__save" type="submit">Сохранить</button>
           </form>
         </div>
