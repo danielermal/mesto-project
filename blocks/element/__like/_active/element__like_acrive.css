@@ -1,0 +1,9 @@
+.element__like_active {
+  margin: 0 5px 1px 0;
+  width: 22px;
+  height: 19px;
+  cursor: pointer;
+  border: none;
+  background-size: cover;
+  background-image: url(../../../../images/like-black.svg);
+}
