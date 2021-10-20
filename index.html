@@ -36,25 +36,25 @@
       <p class="footer__text">&copy; 2020 Mesto Russia</p>
     </footer>
           <!-- popup -->
-    <div class="popup">
+    <div class="popup popup_profile">
         <div class="popup__container">
-          <button class="popup__close page__button" type="button"></button>
+          <button class="popup__close popup__close_profile page__button" type="button"></button>
           <h2 class="popup__title">Редактировать профиль</h2>
-          <form name="profile" class="popup__form">
-            <input type="text" name="name" id="name" value="Жак-Ив Кусто" class="popup__text" required>
-            <input type="text" name="hobbie" id="hobbie" class="popup__text" value="Исследователь океана" required>
+          <form name="profile" class="popup__form popup__form_profile">
+            <input type="text" name="name" id="name" value="Жак-Ив Кусто" placeholder='Имя' class="popup__text" required>
+            <input type="text" name="hobbie" id="hobbie" class="popup__text" value="Исследователь океана" placeholder="Работа" required>
             <button class="popup__save" type="submit">Сохранить</button>
           </form>
         </div>
     </div>
 
-    <div class="popup popup_addphoto">
+    <div class="popup popup_add-photo">
       <div class="popup__container">
-        <button class="popup__close popup__close_addphoto page__button" type="button"></button>
+        <button class="popup__close popup__close_add-photo page__button" type="button"></button>
         <h2 class="popup__title">Новое место</h2>
         <form name="mesto" class="popup__form form__photo">
-          <input type="text" name="place" id="place" value="Название" class="popup__text" required>
-          <input type="text" name="link" id="link" class="popup__text" value="Ссылка на картинку" required>
+          <input type="text" name="place" id="place" placeholder="Название" class="popup__text" required>
+          <input type="text" name="link" id="link" class="popup__text" placeholder="Ссылка на картинку" required>
           <button class="popup__save popup__save_photo" type="submit">Создать</button>
         </form>
       </div>
@@ -65,7 +65,7 @@
     <figure class="popup__image-container">
       <img src="" alt="" class="popup__image">
       <p class="popup__image-title"></p>
-      <button class="popup__close page__button" type="button"></button>
+      <button class="popup__close popup__close_photo page__button" type="button"></button>
     </figure>
   </div>
 

@@ -10,6 +10,7 @@
   background-color: rgba(0, 0, 0, 0);
   cursor: pointer;
   transition: opacity linear 0.2s;
+  filter: drop-shadow(4px 2px 1px #210327);
 }
 
 .element__delete:hover {

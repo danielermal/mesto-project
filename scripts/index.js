@@ -1,57 +1,56 @@
-const addButton = document.querySelector('.profile__add-button')
-const popupAddPhoto = document.querySelector('.popup_addphoto')
-const editButton = document.querySelector('.profile__edit')
-const popupProfile = document.querySelector('.popup')
-const closeProfile = document.querySelector('.popup__close')
-const closePhoto = document.querySelector('.popup__close_addphoto')
-const formElement = document.querySelector('.popup__form')
-const nameInput = formElement.querySelector('#name')
-const jobInput = formElement.querySelector('#hobbie')
+const editButton = document.querySelector(".profile__edit");
+const addButton = document.querySelector(".profile__add-button");
+const closeProfile = document.querySelector(".popup__close_profile");
+const closeAddPhoto = document.querySelector(".popup__close_add-photo");
+const formElementProfile = document.querySelector('.popup__form_profile')
+const nameInput = formElementProfile.querySelector('#name')
+const jobInput = formElementProfile.querySelector('#hobbie')
 const profileName = document.querySelector('.profile__title')
-const profileHobbie = document.querySelector('.profile__subtitle')
+const profileJob = document.querySelector('.profile__subtitle')
 const photoContainer = document.querySelector('.elements')
-const savePhoto = document.querySelector('.popup__save_photo')
 const formPhoto = document.querySelector('.form__photo')
+const photoPlaceInput = formPhoto.querySelector('#place')
+const photoLinkInput = formPhoto.querySelector('#link')
+const popupImage = document.querySelector('.popup__image')
+const popupImageTitle = document.querySelector('.popup__image-title')
+const popupPhotoCloseButton = document.querySelector('.popup__close_photo')
+const popups = document.querySelectorAll(".popup");
 
-// add/close Popup
-editButton.addEventListener('click', function() {
-  popupProfile.classList.add('popup_opened')
-})
-closeProfile.addEventListener('click', closePopup)
-function closePopup() {
-  popupProfile.classList.remove('popup_opened')
+function openPopup(index){
+  popups[index].classList.add("popup_opened");
 }
 
-// add/close popupAddPhoto
-addButton.addEventListener('click', function() {
-  popupAddPhoto.classList.add('popup_opened')
-})
-closePhoto.addEventListener('click', closepopupAddPhoto)
-function closepopupAddPhoto() {
-  popupAddPhoto.classList.remove('popup_opened')
+function closePopup(index){
+  popups[index].classList.remove("popup_opened");
 }
+
+editButton.addEventListener( 'click', ()=> openPopup(0) );
+addButton.addEventListener( 'click', ()=> openPopup(1) );
+closeProfile.addEventListener( 'click', ()=> closePopup(0) );
+closeAddPhoto.addEventListener( 'click', ()=> closePopup(1) );
 
 // Замена данных профиля
-function formSubmitHandler (evt) {
-    evt.preventDefault();
-    profileName.textContent = nameInput.value
-    profileHobbie.textContent = jobInput.value
-    closePopup()
+function formProfileSubmitHandler (evt) {
+  evt.preventDefault();
+  profileName.textContent = nameInput.value
+  profileJob.textContent = jobInput.value
+  closePopup(0)
 }
-formElement.addEventListener('submit', formSubmitHandler);
+formElementProfile.addEventListener('submit', formProfileSubmitHandler);
 
 // Добавление фото
-function addphoto(place, link) {
+function addPhoto(place, link) {
   const photoTemplate = document.querySelector('.photo__template').content;
   const photoElement = photoTemplate.querySelector('.element').cloneNode(true);
   photoElement.querySelector('.element__title').textContent = place
   const photo = photoElement.querySelector('.element__img')
   photo.src = link
   photo.alt = place
+  // ставим лайк
   photoElement.querySelector('.element__like').addEventListener('click', function(evt) {
     evt.target.classList.toggle('element__like_active')
   })
-  photoContainer.prepend(photoElement)
+  closePopup(1)
   // удаляем карточки
   const deleteButton = photoElement.querySelector('.element__delete')
   deleteButton.addEventListener('click', function() {
@@ -59,29 +58,23 @@ function addphoto(place, link) {
   })
   // открываем попап с картинкой
   photo.addEventListener('click', function(){
-    const popupPhotoWindow = document.querySelector('.popup_photo')
-    popupPhotoWindow.classList.add('popup_opened')
-    const popupImage = popupPhotoWindow.querySelector('.popup__image')
+    openPopup(2)
     popupImage.src = link
     popupImage.alt = place
-    const popupImageTitle = popupPhotoWindow.querySelector('.popup__image-title').textContent = place
-    const popupPhotoCloseButton = popupPhotoWindow.querySelector('.popup__close').addEventListener('click', function () {
-      popupPhotoWindow.classList.remove('popup_opened')
-    })
+    popupImageTitle.textContent = place
   })
+  return photoContainer.prepend(photoElement)
 }
-
+// получаем данные для фото
 function formSubmitPhoto (evt) {
   evt.preventDefault()
-  const photoPlace = formPhoto.querySelector('#place')
-  const photoLink = formPhoto.querySelector('#link')
-
-  addphoto(photoPlace.value, photoLink.value)
-  photoPlace.value = ''
-  photoLink.value = ''
-  closepopupAddPhoto()
+  addPhoto(photoPlaceInput.value, photoLinkInput.value)
+  photoPlaceInput.value.reset()
+  photoLinkInput.value.reset()
+  photoContainer.prepend(photoElement)
 }
 formPhoto.addEventListener('submit', formSubmitPhoto);
+popupPhotoCloseButton.addEventListener('click', ()=> closePopup(2))
 
 // добавляем шесть карточек
 const initialCards = [
@@ -110,10 +103,6 @@ const initialCards = [
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
-initialCards.forEach(function (a) {
-  const places = a.name
-  const links = a.link
-  addphoto(places, links)
+initialCards.forEach(function (card) {
+  addPhoto(card.name, card.link)
 })
-
-
