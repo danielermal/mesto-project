@@ -38,7 +38,7 @@ function formProfileSubmitHandler (evt) {
 }
 formElementProfile.addEventListener('submit', formProfileSubmitHandler);
 
-// Добавление фото
+// Создание карточки с фото
 function addPhoto(place, link) {
   const photoTemplate = document.querySelector('.photo__template').content;
   const photoElement = photoTemplate.querySelector('.element').cloneNode(true);
@@ -63,15 +63,19 @@ function addPhoto(place, link) {
     popupImage.alt = place
     popupImageTitle.textContent = place
   })
-  return photoContainer.prepend(photoElement)
+  return photoElement
 }
+// вставляем карточку
+function renderPhoto(photoPlace, photoLink) {
+  photoContainer.prepend(addPhoto(photoPlace, photoLink))
+}
+
 // получаем данные для фото
 function formSubmitPhoto (evt) {
   evt.preventDefault()
-  addPhoto(photoPlaceInput.value, photoLinkInput.value)
+  renderPhoto(photoPlaceInput.value, photoLinkInput.value)
   photoPlaceInput.value.reset()
   photoLinkInput.value.reset()
-  photoContainer.prepend(photoElement)
 }
 formPhoto.addEventListener('submit', formSubmitPhoto);
 popupPhotoCloseButton.addEventListener('click', ()=> closePopup(2))
@@ -104,5 +108,5 @@ const initialCards = [
   }
 ];
 initialCards.forEach(function (card) {
-  addPhoto(card.name, card.link)
+  renderPhoto(card.name, card.link)
 })
