@@ -1,7 +1,6 @@
-.popup__text {
-  width: 358px;
-  max-height: 27px;
-  margin: 54px auto 30px;
+.popup__text-input {
+  width: 100%;
+  margin: 0 auto;
   padding-bottom: 13px;
   font-weight: normal;
   font-size: 14px;
@@ -12,16 +11,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  height: 27px;
 }
 
-.popup__text:last-of-type {
+.popup__text-input:last-of-type {
   margin: 0 auto;
-}
-
-@media screen and (max-width: 767.98px) {
-
-  .popup__text {
-    max-width: 238px;
-    margin: 75px auto 30px;
-  }
 }

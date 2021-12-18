@@ -16,7 +16,10 @@ const popupImageTitle = document.querySelector('.popup__image-title')
 const popupPhotoCloseButton = document.querySelector('.popup__close_photo')
 const popupProfile = document.querySelector('.popup_profile')
 const popupAddPhoto = document.querySelector('.popup_add-photo')
+const popupSaveProfileButton = popupProfile.querySelector('.popup__save')
+const popupSavePhotoButton = popupAddPhoto.querySelector('.popup__save_photo')
 const popupPhoto = document.querySelector('.popup_photo')
+const popup = document.querySelectorAll('.popup')
 
 function openPopup(popup){
   popup.classList.add("popup_opened");
@@ -110,4 +113,78 @@ const initialCards = [
 ];
 initialCards.forEach(function (card) {
   renderPhoto(card.name, card.link)
+})
+
+// валидация формы профиля
+
+nameInput.addEventListener('input', function () {
+  checkInputValidity (nameInput)
+  disabledButton (nameInput, jobInput, popupSaveProfileButton)
+})
+
+jobInput.addEventListener('input', function () {
+  checkInputValidity (jobInput)
+  disabledButton (nameInput, jobInput, popupSaveProfileButton)
+})
+
+function checkInputValidity (input) {
+  if (!input.validity.valid) {
+    showError(input, input.validationMessage)
+  }
+  else {
+    hideError(input)
+  }
+}
+
+function showError(input, errorMessage) {
+  input.classList.add(`${input.classList[0]}_type_error`)
+  const inputError = input.nextElementSibling
+  inputError.textContent = errorMessage
+  inputError.classList.add(`${inputError.classList[0]}_active`)
+}
+
+function hideError (input) {
+  input.classList.remove(`${input.classList[0]}_type_error`)
+  const inputError = input.nextElementSibling
+  inputError.textContent = ''
+  inputError.classList.remove(`${inputError.classList[0]}_active`)
+}
+
+function disabledButton (inputOne, inputTwo, saveButton) {
+  if (inputOne.validity.valid && inputTwo.validity.valid) {
+    saveButton.classList.remove('popup__save_disabled')
+    saveButton.disabled = 0
+  }
+  else {
+    saveButton.classList.add('popup__save_disabled')
+    saveButton.disabled = 1
+  }
+}
+
+// валидация добавления карточки
+photoPlaceInput.addEventListener('input', function () {
+  checkInputValidity (photoPlaceInput)
+  disabledButton (photoPlaceInput, photoLinkInput, popupSavePhotoButton)
+})
+
+photoLinkInput.addEventListener('input', function() {
+  checkInputValidity (photoLinkInput)
+  disabledButton (photoPlaceInput, photoLinkInput, popupSavePhotoButton)
+})
+
+//  Закрываем попап при клике за зетемненную обасть
+popup.forEach(function (item) {
+  item.addEventListener('click', function (event) {
+    if (event.target === event.currentTarget) {
+      closePopup(item)
+    }
+  })
+})
+
+document.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Escape') {
+    popup.forEach((item) => {
+      closePopup(item)
+    })
+  }
 })

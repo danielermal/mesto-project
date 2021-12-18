@@ -5,13 +5,14 @@
   border: none;
   border-radius: 2px;
   text-align: center;
-  margin: 48px auto 37px;
+  margin: 31px auto 37px;
   color: #FFF;
   transition: background-color  linear 0.2s;
   cursor: pointer;
   font-weight: normal;
   font-size: 18px;
   line-height: 22px;
+  box-sizing: border-box;
 }
 
 .popup__save:hover {
