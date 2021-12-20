@@ -1,3 +1,5 @@
+import '../index.css';
+
 import {popupSavePhotoButton, popupSaveProfileButton, enableValidation, checkInputValidity, showError, hideError, disabledButton} from './validate.js';
 
 import {enableCard, popupImage, popupImageTitle, photoContainer, formPhoto, photoPlaceInput, photoLinkInput, addCard, renderPhoto, formSubmitPhoto} from './card.js'
