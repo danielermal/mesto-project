@@ -1,4 +1,4 @@
-import '../index.css';
+import '../pages/index.css';
 
 import {popupSavePhotoButton, popupSaveProfileButton, enableValidation, checkInputValidity, showError, hideError, disabledButton} from './validate.js';
 
