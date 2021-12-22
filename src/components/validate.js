@@ -1,11 +1,20 @@
-const enableValidation = {
-  saveProfileButton: '.popup__save_profile',
-  savePhotoButton: '.popup__save_photo',
+const enableValidation = ({formSelector, inputSelector, submitButtonSelector}) => {
+  const getFormList = Array.from(document.querySelectorAll(formSelector));
+  getFormList.forEach((formElement) => {
+    formElement.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+
+    });
+    const getInputList = Array.from(formElement.querySelectorAll(inputSelector))
+    const saveButton = formElement.querySelector(submitButtonSelector)
+    getInputList.forEach((inputElement) => {
+      inputElement.addEventListener('input', () => {
+        checkInputValidity(inputElement)
+        disabledButton(getInputList[0], getInputList[1], saveButton)
+      })
+    })
+  })
 };
-
-const popupSaveProfileButton = document.querySelector(enableValidation.saveProfileButton)
-const popupSavePhotoButton = document.querySelector(enableValidation.savePhotoButton)
-
 
 function checkInputValidity (input) {
   if (!input.validity.valid) {
@@ -32,13 +41,13 @@ function hideError (input) {
 
 function disabledButton (inputOne, inputTwo, saveButton) {
   if (inputOne.validity.valid && inputTwo.validity.valid) {
-    saveButton.classList.remove('popup__save_disabled')
+    saveButton.classList.remove(`${saveButton.classList[0]}_disabled`)
     saveButton.disabled = 0
   }
   else {
-    saveButton.classList.add('popup__save_disabled')
+    saveButton.classList.add(`${saveButton.classList[0]}_disabled`)
     saveButton.disabled = 1
   }
 }
 
-export {popupSavePhotoButton, popupSaveProfileButton, enableValidation, checkInputValidity, showError, hideError, disabledButton}
+export { enableValidation }

@@ -1,11 +1,13 @@
 import { closePopup,  popupAddPhoto, openPopup, popupPhoto} from "./modal.js"
+
 const enableCard = {
   popupImage:'.popup__image',
   popupImageTitle: '.popup__image-title',
   photoContainer: '.elements',
   formPhoto: '.form__photo',
   photoPlaceInput: '#place',
-  photoLinkInput: '#link'
+  photoLinkInput: '#link',
+  popupSavePhotoButton: '.popup__save_photo'
 }
 
 const popupImage = document.querySelector(enableCard.popupImage)
@@ -14,15 +16,16 @@ const photoContainer = document.querySelector(enableCard.photoContainer)
 const formPhoto = document.querySelector(enableCard.formPhoto)
 const photoPlaceInput = formPhoto.querySelector(enableCard.photoPlaceInput)
 const photoLinkInput = formPhoto.querySelector(enableCard.photoLinkInput)
+const popupSavePhotoButton = document.querySelector(enableCard.popupSavePhotoButton)
 
 // Создание карточки с фото
 function addCard(place, link) {
   const cardTemplate = document.querySelector('.photo__template').content;
   const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
   cardElement.querySelector('.element__title').textContent = place
-  const card = cardElement.querySelector('.element__img')
-  card.src = link
-  card.alt = place
+  const cardImage = cardElement.querySelector('.element__img')
+  cardImage.src = link
+  cardImage.alt = place
   // ставим лайк
   cardElement.querySelector('.element__like').addEventListener('click', function(evt) {
     evt.target.classList.toggle('element__like_active')
@@ -33,7 +36,7 @@ function addCard(place, link) {
     cardElement.remove()
   })
   // открываем попап с картинкой
-  card.addEventListener('click', function(){
+  cardImage.addEventListener('click', function(){
     openPopup(popupPhoto)
     popupImage.src = link
     popupImage.alt = place
@@ -47,12 +50,16 @@ function renderPhoto(photoPlace, photoLink) {
 }
 
 // получаем данные для фото
-function formSubmitPhoto (evt) {
+function submitPhotoForm (evt) {
   evt.preventDefault()
   renderPhoto(photoPlaceInput.value, photoLinkInput.value)
   formPhoto.reset()
+  popupSavePhotoButton.disabled = 1
+  popupSavePhotoButton.classList.add('popup__save_disabled')
   closePopup(popupAddPhoto)
 }
+
+formPhoto.addEventListener('submit', submitPhotoForm);
 
 // добавляем шесть карточек
 const initialCards = [
@@ -85,4 +92,4 @@ initialCards.forEach(function (card) {
   renderPhoto(card.name, card.link)
 })
 
-export {enableCard, popupImage, popupImageTitle, photoContainer, formPhoto, photoPlaceInput, photoLinkInput, addCard, renderPhoto, formSubmitPhoto}
+export {enableCard, popupImage, popupImageTitle, photoContainer, formPhoto, photoPlaceInput, photoLinkInput, addCard, renderPhoto, submitPhotoForm}
