@@ -9,7 +9,8 @@ const enableModal = {
   profileJob: '.profile__subtitle',
   formElementProfile: '.popup__form_profile',
   nameInput: '#name',
-  jobInput: '#hobbie'
+  jobInput: '#hobbie',
+  popups: '.popup'
 }
 
 const editButton = document.querySelector(enableModal.editButton);
@@ -23,12 +24,12 @@ const profileJob = document.querySelector(enableModal.profileJob)
 const formElementProfile = document.querySelector(enableModal.formElementProfile)
 const nameInput = formElementProfile.querySelector(enableModal.nameInput)
 const jobInput = formElementProfile.querySelector(enableModal.jobInput)
+const popups = document.querySelectorAll(enableModal.popups)
 
 
 function openPopup(popup){
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', closePopupByEscape)
-  closePopupByClick(popup)
 }
 
 function closePopup(popup){
@@ -45,16 +46,16 @@ function formProfileSubmitHandler (evt) {
 }
 
 //  Закрываем попап при клике за зетемненную обасть
-function closePopupByClick (popup) {
-    popup.addEventListener('click', (evt) => {
-        if (evt.target.classList.contains('popup_opened')) {
-            closePopup(popup)
-        }
-        if (evt.target.classList.contains('popup__close')) {
-          closePopup(popup)
-        }
-    })
-}
+popups.forEach(popup => {{
+  popup.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup_opened')) {
+        closePopup(popup)
+    }
+    if (evt.target.classList.contains('popup__close')) {
+      closePopup(popup)
+    }
+  })
+}})
 
 // Закрываем при нажатии Esc
 function closePopupByEscape (evt) {

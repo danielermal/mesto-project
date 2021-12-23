@@ -3,14 +3,13 @@ const enableValidation = ({formSelector, inputSelector, submitButtonSelector}) =
   getFormList.forEach((formElement) => {
     formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
-
     });
     const getInputList = Array.from(formElement.querySelectorAll(inputSelector))
     const saveButton = formElement.querySelector(submitButtonSelector)
     getInputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
         checkInputValidity(inputElement)
-        disabledButton(getInputList[0], getInputList[1], saveButton)
+        disabledButton(getInputList, saveButton)
       })
     })
   })
@@ -39,8 +38,9 @@ function hideError (input) {
   inputError.classList.remove(`${inputError.classList[0]}_active`)
 }
 
-function disabledButton (inputOne, inputTwo, saveButton) {
-  if (inputOne.validity.valid && inputTwo.validity.valid) {
+function disabledButton (inputList, saveButton) {
+  if (inputList.every((inputElement) => inputElement.validity.valid
+  )) {
     saveButton.classList.remove(`${saveButton.classList[0]}_disabled`)
     saveButton.disabled = 0
   }
