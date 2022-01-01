@@ -1,5 +1,5 @@
 .element__like {
-  margin: 0 5px 1px 0;
+  margin: auto auto 0;
   transition: opacity linear 0.2s;
   background-image: url(../../../images/like.svg);
   width: 22px;

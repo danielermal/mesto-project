@@ -1,0 +1,15 @@
+.profile__img-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color, 0.3s linear;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+.profile__img-container:hover .profile__img-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+  background-image: url(../../../images/changeAvatar.svg);
+}

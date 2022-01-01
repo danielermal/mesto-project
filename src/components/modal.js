@@ -1,3 +1,6 @@
+import { changeProfile, changeAvatar } from "./api.js";
+import { avatar } from "./index.js";
+
 const enableModal = {
   editButton: '.profile__edit',
   addButton: '.profile__add-button',
@@ -10,7 +13,12 @@ const enableModal = {
   formElementProfile: '.popup__form_profile',
   nameInput: '#name',
   jobInput: '#hobbie',
-  popups: '.popup'
+  popups: '.popup',
+  popupAvatar: '.popup_change-avatar',
+  avatarForm: '.popup__form_avatar',
+  avatarInput: '#avatar',
+  avatarLoading: '.popup__loading',
+  avatarSaveText: '.popup__save-text'
 }
 
 const editButton = document.querySelector(enableModal.editButton);
@@ -24,8 +32,14 @@ const profileJob = document.querySelector(enableModal.profileJob)
 const formElementProfile = document.querySelector(enableModal.formElementProfile)
 const nameInput = formElementProfile.querySelector(enableModal.nameInput)
 const jobInput = formElementProfile.querySelector(enableModal.jobInput)
+const popupProfileSaveText = formElementProfile.querySelector(enableModal.avatarSaveText)
+const popupProfileLoading = formElementProfile.querySelector(enableModal.avatarLoading)
 const popups = document.querySelectorAll(enableModal.popups)
-
+const popupAvatar = document.querySelector(enableModal.popupAvatar)
+const avatarForm = document.querySelector(enableModal.avatarForm)
+const avatarInput = document.querySelector(enableModal.avatarInput)
+const avatarLoading = avatarForm.querySelector(enableModal.avatarLoading)
+const avatarSaveText = avatarForm.querySelector(enableModal.avatarSaveText)
 
 function openPopup(popup){
   popup.classList.add('popup_opened');
@@ -40,9 +54,20 @@ function closePopup(popup){
 // Замена данных профиля
 function formProfileSubmitHandler (evt) {
   evt.preventDefault();
+  renderLoading(popupProfileSaveText, popupProfileLoading, true, 'Сохранение')
   profileName.textContent = nameInput.value
   profileJob.textContent = jobInput.value
-  closePopup(popupProfile)
+  changeProfile(nameInput.value, jobInput.value)
+  .then((result) => {
+    console.log(result)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+  .finally(() => {
+    renderLoading(popupProfileSaveText, popupProfileLoading, false, 'Сохранить')
+    closePopup(popupProfile)
+  })
 }
 
 //  Закрываем попап при клике за зетемненную обасть
@@ -65,4 +90,31 @@ function closePopupByEscape (evt) {
   }
 }
 
-export {popupAddPhoto, closePopup, enableModal, editButton, addButton, closeProfile, popupProfile, popupPhoto, openPopup, formProfileSubmitHandler, profileName, profileJob, formElementProfile, nameInput, jobInput}
+avatarForm.addEventListener('submit' , () => {
+  renderLoading(avatarSaveText, avatarLoading, true, 'Сохранение')
+  changeAvatar(avatarInput.value)
+  .then((result) => {
+    avatar.src = result.avatar
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+  .finally(() => {
+    renderLoading(avatarSaveText, avatarLoading, false, 'Сохранить')
+    closePopup(popupAvatar)
+  })
+})
+
+// создаем видимость загрузки
+function renderLoading (button, element, status, text) {
+  if (status) {
+    button.textContent = text
+    element.classList.add('popup__loading_active')
+  }
+  else {
+    button.textContent = text
+    element.classList.remove('popup__loading_active')
+  }
+}
+
+export {popupAddPhoto, closePopup, enableModal, editButton, addButton, closeProfile, popupProfile, popupPhoto, openPopup, formProfileSubmitHandler, profileName, profileJob, formElementProfile, nameInput, jobInput, popupAvatar, renderLoading}

@@ -1,0 +1,15 @@
+.popup__loading {
+  overflow: hidden;
+  display: none;
+  vertical-align: bottom;
+  animation: loading 1s infinite;
+}
+
+@keyframes loading {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 14px;
+  }
+}

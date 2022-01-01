@@ -1,0 +1,10 @@
+.profile__img-container {
+  display: flex;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  width: 120px;
+  height: 120px;
+  position: relative;
+  cursor: pointer;
+}
+
