@@ -55,14 +55,13 @@ function renderPhoto(card) {
   const cardNumbersOfLikes = cardElement.querySelector(
     ".element__numbers-of-likes"
   );
-  addNumbersOfLikes(cardNumbersOfLikes, card.likes);
   // ставим лайк
   const cardLikeButton = cardElement.querySelector(".element__like")
+  addNumbersOfLikes(cardNumbersOfLikes, card.likes, profileName.textContent, cardLikeButton);
   cardLikeButton.addEventListener("click", function (evt) {
     evt.target.classList.toggle("element__like_active");
     showNumbersOfLikes(cardLikeButton, cardNumbersOfLikes, card._id)
   });
-  showMyActiveLikes(profileName.textContent, card, cardLikeButton)
 }
 
 // получаем данные для фото
@@ -87,18 +86,15 @@ function submitPhotoForm (evt) {
 
 formPhoto.addEventListener('submit', submitPhotoForm);
 
-// добавляем готовые карточки
-getInitialCards()
-.then((result) => {
-  console.log(result)
-  result.forEach((card) => {
-    renderPhoto(card)
-  })
-})
-
-function addNumbersOfLikes (element, likes) {
+function addNumbersOfLikes (element, likes, name, likeButton) {
   if (likes.length > 0) {
     element.textContent = likes.length
+    likes.forEach((like) => {
+      if (like.name === name) {
+        likeButton.classList.add('element__like_active')
+        console.log('active')
+      }
+    })
   }
   else {
     element.textContent = ''
@@ -118,14 +114,16 @@ function addDeleteButton (container, markup, card) {
       // удаляем карточки
       const deleteButton = container.querySelector(".element__delete");
       deleteButton.addEventListener("click", function () {
-        openPopup(popupRemovePhoto);
-        popupRemovePhoto.addEventListener("click", (evt) => {
-          if (evt.target.classList.contains('popup__save_remove-photo')) {
-            container.remove();
-            closePopup(popupRemovePhoto);
-            removeCard(card._id)
-          }
-        });
+        container.remove();
+        removeCard(card._id)
+        // openPopup(popupRemovePhoto);
+        // popupRemovePhoto.addEventListener("click", (evt) => {
+        //   if (evt.target.classList.contains('popup__save_remove-photo')) {
+        //     container.remove();
+        //     closePopup(popupRemovePhoto);
+        //     removeCard(card._id)
+        //   }
+        // });
       });
     }
   })
@@ -146,14 +144,6 @@ function showNumbersOfLikes (likeButton, showLikesElement, id) {
       addNumbersOfLikes(showLikesElement, result.likes)
     })
   }
-}
-
-function showMyActiveLikes (name, card, likeButton) {
-  card.likes.forEach((like) => {
-    if (like.name === name) {
-      likeButton.classList.add('element__like_active')
-    }
-  })
 }
 
 export {enableCard, popupImage, popupImageTitle, photoContainer, formPhoto, photoPlaceInput, photoLinkInput, addCard, renderPhoto, submitPhotoForm}
