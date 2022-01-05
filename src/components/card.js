@@ -1,6 +1,5 @@
-import { closePopup,  popupAddPhoto, openPopup, popupPhoto } from "./modal.js"
-import { getInitialCards, addNewCard, getInitialProfile, removeCard, addLike, removeLike } from "./api.js"
-import { profileName, renderLoading } from "./modal.js"
+import { closePopup,  popupAddPhoto, openPopup, popupPhoto, renderLoading } from "./modal.js"
+import { addNewCard, removeCard, addLike, removeLike, getInitialProfile } from "./api.js"
 
 const enableCard = {
   popupImage:'.popup__image',
@@ -28,38 +27,50 @@ const popupRemovePhotoButton = document.querySelector(enableCard.popupRemovePhot
 const popupSavePhotoButtonText = formPhoto.querySelector(enableCard.popupSavePhotoButtonText)
 const popupSavePhotoLoading = formPhoto.querySelector(enableCard.popupSavePhotoLoading)
 
+let userId
 
 // Создание карточки с фото
-function addCard(place, link) {
-  const cardTemplate = document.querySelector('.photo__template').content;
-  const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
-  cardElement.querySelector('.element__title').textContent = place
-  const cardImage = cardElement.querySelector('.element__img')
-  cardImage.src = link
-  cardImage.alt = place
+function addCard(card, id) {
+  const cardTemplate = document.querySelector(".photo__template").content;
+  const cardElement = cardTemplate.querySelector(".element").cloneNode(true);
+  cardElement.querySelector(".element__title").textContent = card.name;
+  const cardImage = cardElement.querySelector(".element__img");
+  cardImage.src = card.link;
+  cardImage.alt = card.place;
+  // удаляем карточки
+  if (id === card.owner._id) {
+    addDeleteButton(cardElement, createDeleteButton(), card, id).addEventListener("click", () => {
+      removeCard(card._id)
+        .then((res) => {
+          console.log(res)
+          cardElement.remove();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  }
   // открываем попап с картинкой
-  cardImage.addEventListener('click', function(){
-    openPopup(popupPhoto)
-    popupImage.src = link
-    popupImage.alt = place
-    popupImageTitle.textContent = place
-  })
-  return cardElement
+  cardImage.addEventListener("click", function () {
+    openPopup(popupPhoto);
+    popupImage.src = card.link;
+    popupImage.alt = card.place;
+    popupImageTitle.textContent = card.place;
+  });
+  return cardElement;
 }
 // вставляем карточку
-function renderPhoto(card) {
-  photoContainer.prepend(addCard(card.name, card.link));
+function renderPhoto(card, id) {
+  photoContainer.prepend(addCard(card, id));
   const cardElement = photoContainer.querySelector(".element");
-  addDeleteButton(cardElement, createDeleteButton(), card);
   // показываем количество лайков
   const cardNumbersOfLikes = cardElement.querySelector(
     ".element__numbers-of-likes"
   );
   // ставим лайк
   const cardLikeButton = cardElement.querySelector(".element__like")
-  addNumbersOfLikes(cardNumbersOfLikes, card.likes, profileName.textContent, cardLikeButton);
+  addNumbersOfLikes(cardNumbersOfLikes, card.likes, id, cardLikeButton);
   cardLikeButton.addEventListener("click", function (evt) {
-    evt.target.classList.toggle("element__like_active");
     showNumbersOfLikes(cardLikeButton, cardNumbersOfLikes, card._id)
   });
 }
@@ -68,31 +79,32 @@ function renderPhoto(card) {
 function submitPhotoForm (evt) {
   evt.preventDefault()
   renderLoading(popupSavePhotoButtonText, popupSavePhotoLoading, true, 'Создание')
-  addNewCard(photoPlaceInput.value, photoLinkInput.value)
-  .then((result) => {
-    renderPhoto(result)
+  getInitialProfile()
+  .then((res) => {
+    userId = res._id
+    addNewCard(photoPlaceInput.value, photoLinkInput.value)
+    .then((result) => {
+      renderPhoto(result, userId)
+      closePopup(popupAddPhoto)
+      formPhoto.reset()
+      popupSavePhotoButton.disabled = 1
+      popupSavePhotoButton.classList.add('popup__save_disabled')
+    })
   })
   .catch((err) => {
     console.log(err)
   })
   .finally(() => {
     renderLoading(popupSavePhotoButtonText, popupSavePhotoLoading, false, 'Создать')
-    closePopup(popupAddPhoto)
-    formPhoto.reset()
-    popupSavePhotoButton.disabled = 1
-    popupSavePhotoButton.classList.add('popup__save_disabled')
   })
 }
 
-formPhoto.addEventListener('submit', submitPhotoForm);
-
-function addNumbersOfLikes (element, likes, name, likeButton) {
+function addNumbersOfLikes (element, likes, userId, likeButton) {
   if (likes.length > 0) {
     element.textContent = likes.length
     likes.forEach((like) => {
-      if (like.name === name) {
+      if (like._id === userId) {
         likeButton.classList.add('element__like_active')
-        console.log('active')
       }
     })
   }
@@ -105,43 +117,33 @@ function createDeleteButton () {
   return `<button class="element__delete" type="button"></button>`
 }
 
-function addDeleteButton (container, markup, card) {
-  getInitialProfile()
-  .then((result) => {
-    if (result.name === card.owner.name) {
-      container.insertAdjacentHTML("beforeend", markup);
-      console.log(container);
-      // удаляем карточки
-      const deleteButton = container.querySelector(".element__delete");
-      deleteButton.addEventListener("click", function () {
-        container.remove();
-        removeCard(card._id)
-        // openPopup(popupRemovePhoto);
-        // popupRemovePhoto.addEventListener("click", (evt) => {
-        //   if (evt.target.classList.contains('popup__save_remove-photo')) {
-        //     container.remove();
-        //     closePopup(popupRemovePhoto);
-        //     removeCard(card._id)
-        //   }
-        // });
-      });
-    }
-  })
+function addDeleteButton (container, markup) {
+    container.insertAdjacentHTML("beforeend", markup);
+    const deleteButton = container.querySelector(".element__delete");
+    return deleteButton;
 }
 
 function showNumbersOfLikes (likeButton, showLikesElement, id) {
-  if (likeButton.classList.contains('element__like_active')) {
+  if (!likeButton.classList.contains('element__like_active')) {
     addLike(id)
     .then((result) => {
+      likeButton.classList.add("element__like_active");
       console.log(result)
       addNumbersOfLikes(showLikesElement, result.likes)
+    })
+    .catch((err) => {
+      console.log(err)
     })
   }
   else {
     removeLike(id)
     .then((result) => {
+      likeButton.classList.remove("element__like_active");
       console.log(result)
       addNumbersOfLikes(showLikesElement, result.likes)
+    })
+    .catch((err) => {
+      console.log(err)
     })
   }
 }

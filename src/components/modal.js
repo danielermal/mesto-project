@@ -1,5 +1,4 @@
-import { changeProfile, changeAvatar } from "./api.js";
-import { avatar } from "./index.js";
+import { changeProfile } from "./api.js";
 
 const enableModal = {
   editButton: '.profile__edit',
@@ -55,23 +54,23 @@ function closePopup(popup){
 function formProfileSubmitHandler (evt) {
   evt.preventDefault();
   renderLoading(popupProfileSaveText, popupProfileLoading, true, 'Сохранение')
-  profileName.textContent = nameInput.value
-  profileJob.textContent = jobInput.value
   changeProfile(nameInput.value, jobInput.value)
   .then((result) => {
     console.log(result)
+    profileName.textContent = result.name
+    profileJob.textContent = result.about
+    closePopup(popupProfile)
   })
   .catch((err) => {
     console.log(err)
   })
   .finally(() => {
     renderLoading(popupProfileSaveText, popupProfileLoading, false, 'Сохранить')
-    closePopup(popupProfile)
   })
 }
 
 //  Закрываем попап при клике за зетемненную обасть
-popups.forEach(popup => {{
+popups.forEach(popup => {
   popup.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('popup_opened')) {
         closePopup(popup)
@@ -80,7 +79,7 @@ popups.forEach(popup => {{
       closePopup(popup)
     }
   })
-}})
+})
 
 // Закрываем при нажатии Esc
 function closePopupByEscape (evt) {
@@ -89,21 +88,6 @@ function closePopupByEscape (evt) {
     closePopup(openedPopup)
   }
 }
-
-avatarForm.addEventListener('submit' , () => {
-  renderLoading(avatarSaveText, avatarLoading, true, 'Сохранение')
-  changeAvatar(avatarInput.value)
-  .then((result) => {
-    avatar.src = result.avatar
-  })
-  .catch((err) => {
-    console.log(err)
-  })
-  .finally(() => {
-    renderLoading(avatarSaveText, avatarLoading, false, 'Сохранить')
-    closePopup(popupAvatar)
-  })
-})
 
 // создаем видимость загрузки
 function renderLoading (button, element, status, text) {
@@ -117,4 +101,4 @@ function renderLoading (button, element, status, text) {
   }
 }
 
-export {popupAddPhoto, closePopup, enableModal, editButton, addButton, closeProfile, popupProfile, popupPhoto, openPopup, formProfileSubmitHandler, profileName, profileJob, formElementProfile, nameInput, jobInput, popupAvatar, renderLoading}
+export {popupAddPhoto, closePopup, enableModal, editButton, addButton, closeProfile, popupProfile, popupPhoto, openPopup, formProfileSubmitHandler, profileName, profileJob, formElementProfile, nameInput, jobInput, popupAvatar, renderLoading, avatarForm, avatarInput, avatarLoading, avatarSaveText}
