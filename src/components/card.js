@@ -1,5 +1,6 @@
 import { closePopup,  popupAddPhoto, openPopup, popupPhoto, renderLoading } from "./modal.js"
-import { addNewCard, removeCard, addLike, removeLike, getInitialProfile } from "./api.js"
+import { addNewCard, removeCard, addLike, removeLike } from "./api.js"
+import { userId } from "./index.js"
 
 const enableCard = {
   popupImage:'.popup__image',
@@ -27,8 +28,6 @@ const popupRemovePhotoButton = document.querySelector(enableCard.popupRemovePhot
 const popupSavePhotoButtonText = formPhoto.querySelector(enableCard.popupSavePhotoButtonText)
 const popupSavePhotoLoading = formPhoto.querySelector(enableCard.popupSavePhotoLoading)
 
-let userId
-
 // Создание карточки с фото
 function addCard(card, id) {
   const cardTemplate = document.querySelector(".photo__template").content;
@@ -36,60 +35,59 @@ function addCard(card, id) {
   cardElement.querySelector(".element__title").textContent = card.name;
   const cardImage = cardElement.querySelector(".element__img");
   cardImage.src = card.link;
-  cardImage.alt = card.place;
+  cardImage.alt = card.name;
   // удаляем карточки
   if (id === card.owner._id) {
-    addDeleteButton(cardElement, createDeleteButton(), card, id).addEventListener("click", () => {
+    addDeleteButton(
+      cardElement,
+      createDeleteButton()
+    ).addEventListener("click", () => {
       removeCard(card._id)
-        .then((res) => {
-          console.log(res)
-          cardElement.remove();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      .then((res) => {
+        console.log(res);
+        cardElement.remove();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     });
   }
-  // открываем попап с картинкой
-  cardImage.addEventListener("click", function () {
-    openPopup(popupPhoto);
-    popupImage.src = card.link;
-    popupImage.alt = card.place;
-    popupImageTitle.textContent = card.place;
-  });
-  return cardElement;
-}
-// вставляем карточку
-function renderPhoto(card, id) {
-  photoContainer.prepend(addCard(card, id));
-  const cardElement = photoContainer.querySelector(".element");
   // показываем количество лайков
   const cardNumbersOfLikes = cardElement.querySelector(
     ".element__numbers-of-likes"
   );
   // ставим лайк
-  const cardLikeButton = cardElement.querySelector(".element__like")
+  const cardLikeButton = cardElement.querySelector(".element__like");
   addNumbersOfLikes(cardNumbersOfLikes, card.likes, id, cardLikeButton);
   cardLikeButton.addEventListener("click", function (evt) {
-    showNumbersOfLikes(cardLikeButton, cardNumbersOfLikes, card._id)
+    showNumbersOfLikes(cardLikeButton, cardNumbersOfLikes, card._id);
   });
+  // открываем попап с картинкой
+  cardImage.addEventListener("click", function () {
+    openPopup(popupPhoto);
+    popupImage.src = card.link;
+    popupImage.alt = card.name;
+    popupImageTitle.textContent = card.name;
+  });
+  return cardElement;
+}
+
+// вставляем карточку
+function renderPhoto(card, id) {
+  photoContainer.prepend(addCard(card, id));
 }
 
 // получаем данные для фото
 function submitPhotoForm (evt) {
   evt.preventDefault()
   renderLoading(popupSavePhotoButtonText, popupSavePhotoLoading, true, 'Создание')
-  getInitialProfile()
-  .then((res) => {
-    userId = res._id
-    addNewCard(photoPlaceInput.value, photoLinkInput.value)
-    .then((result) => {
-      renderPhoto(result, userId)
-      closePopup(popupAddPhoto)
-      formPhoto.reset()
-      popupSavePhotoButton.disabled = 1
-      popupSavePhotoButton.classList.add('popup__save_disabled')
-    })
+  addNewCard(photoPlaceInput.value, photoLinkInput.value)
+  .then((result) => {
+    renderPhoto(result, userId)
+    closePopup(popupAddPhoto)
+    formPhoto.reset()
+    popupSavePhotoButton.disabled = 1
+    popupSavePhotoButton.classList.add('popup__save_disabled')
   })
   .catch((err) => {
     console.log(err)

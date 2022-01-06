@@ -11,7 +11,7 @@ import { getInitialProfile, getInitialCards, changeAvatar } from './api.js'
 
 const avatar = document.querySelector('.profile__img')
 
-let userId
+export let userId
 
 getInitialProfile()
 .then((result) => {
