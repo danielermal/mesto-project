@@ -1,4 +1,4 @@
-import { changeProfile } from "./api.js";
+import { changeProfile } from "./Api.js";
 
 const enableModal = {
   editButton: '.profile__edit',

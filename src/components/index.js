@@ -7,7 +7,7 @@ import {enableCard, popupImage, popupImageTitle, photoContainer, formPhoto, phot
 import {popupAddPhoto, closePopup, enableModal, editButton, addButton, closeProfile, popupProfile, popupPhoto, openPopup, formProfileSubmitHandler, profileName, profileJob, formElementProfile, nameInput, jobInput, popupAvatar, renderLoading, avatarForm, avatarInput, avatarLoading, avatarSaveText}
 from './modal.js'
 
-import { getInitialProfile, getInitialCards, changeAvatar } from './api.js'
+import { getInitialProfile, getInitialCards, changeAvatar } from './Api.js'
 
 const avatar = document.querySelector('.profile__img')
 

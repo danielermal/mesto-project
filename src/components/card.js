@@ -1,5 +1,5 @@
 import { closePopup,  popupAddPhoto, openPopup, popupPhoto, renderLoading } from "./modal.js"
-import { addNewCard, removeCard, addLike, removeLike } from "./api.js"
+import { addNewCard, removeCard, addLike, removeLike } from "./Api.js"
 import { userId } from "./index.js"
 
 const enableCard = {
