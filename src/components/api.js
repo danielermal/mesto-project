@@ -6,7 +6,7 @@ class Api {
     this.headers = headers
   }
 
-  checkResponse(res) {
+  _checkResponse(res) {
     if (res.ok) {
       return res.json()
     }
@@ -17,14 +17,14 @@ class Api {
     return fetch(`${this.baseUrl}/users/me`, {
       headers: this.headers
     })
-    .then(this.checkResponse)
+    .then(this._checkResponse)
   }
 
   getInitialCards = () => {
     return fetch(`${this.baseUrl}/cards`, {
       headers: this.headers
     })
-    .then(this.checkResponse)
+    .then(this._checkResponse)
   }
 
   changeProfile (name, about) {
@@ -36,7 +36,7 @@ class Api {
         about: about
       })
     })
-    .then(this.checkResponse)
+    .then(this._checkResponse)
   }
 
   addNewCard (name, link) {
@@ -48,7 +48,7 @@ class Api {
         link: link
       })
     })
-    .then(this.checkResponse)
+    .then(this._checkResponse)
   }
 
   removeCard (id) {
@@ -56,7 +56,7 @@ class Api {
       method: 'DELETE',
       headers: this.headers
     })
-    .then(this.checkResponse)
+    .then(this._checkResponse)
   }
 
   addLike (id) {
@@ -64,7 +64,7 @@ class Api {
       method: 'PUT',
       headers: this.headers
     })
-    .then(this.checkResponse)
+    .then(this._checkResponse)
   }
 
   removeLike (id) {
@@ -72,7 +72,7 @@ class Api {
       method: 'DELETE',
       headers: this.headers
     })
-    .then(this.checkResponse)
+    .then(this._checkResponse)
   }
 
   changeAvatar (avatar) {
@@ -83,7 +83,7 @@ class Api {
         avatar: avatar
       })
     })
-    .then(this.checkResponse)
+    .then(this._checkResponse)
   }
 
 }
