@@ -4,7 +4,7 @@ import { FormValidator } from '../components/FormValidator.js';
 
 import { Card } from '../components/Сard.js'
 
-import { editButton, addButton, changeAvatarButton, avatar } from '../utils/constants.js'
+import { editButton, addButton, changeAvatarButton, avatar, validConfig, popupAddCard, popupEditProfile, popupEditAvatar } from '../utils/constants.js'
 
 import { api } from '../components/Api.js'
 
@@ -54,14 +54,31 @@ editButton.addEventListener('click', () => new Popup('.popup_profile').openPopup
 addButton.addEventListener('click', () => new Popup('.popup_add-photo').openPopup());
 changeAvatarButton.addEventListener('click', () => new Popup('.popup_change-avatar').openPopup())
 
-const validation = new FormValidator({
-    formSelector: '.popup__form',
-    inputSelector: '.popup__text-input',
-    buttonSelector: '.popup__save'
-})
+// //Как мне кажется это не правильно, но для теста подойдет
+// addButton.addEventListener('click', () => {
+//     validAddCard.removeAllErrors();
+//     validAddCard.disableSubmitButton();
+//     //по правильному их надо подключить в момент открытия экземпляра попапа
+// })
 
-validation.enableValidation()
+// const validation = new FormValidator({
+//     formSelector: '.popup__form',
+//     inputSelector: '.popup__text-input',
+//     buttonSelector: '.popup__save'
+// })
 
+// validation.enableValidation()
+
+//Навешиваем Валидацию:
+//добавление карточки
+const validAddCard = new FormValidator(validConfig, popupAddCard);
+validAddCard.enableValidation();
+//профиль
+const validProfile = new FormValidator(validConfig, popupEditProfile);
+validProfile.enableValidation();
+//аватар
+const validAvatar = new FormValidator(validConfig, popupEditAvatar);
+validAvatar.enableValidation();
 // замена данных профиля при сабмите
 const changeProfileForm = new PopupWithForm({
     submitForm: (evt) => {
@@ -109,7 +126,7 @@ const addCardForm = new PopupWithForm({
                 const newCard = new Section({}, '.elements');
                 newCard.setItem(new Card(result, userId, '.photo__template').getCard())
                 form.closePopup(true) //закрывается верно, в теле запроса
-                validation.enableValidation()
+                    //validation.enableValidation()
             })
             .catch((err) => {
                 console.log(err)
@@ -141,7 +158,7 @@ const changeAvatarForm = new PopupWithForm({
                 avatar.src = result.avatar
                 console.log(result)
                 form.closePopup(true) //закрывается верно, в теле запроса
-                validation.enableValidation()
+                    //validation.enableValidation()
             })
             .catch((err) => {
                 console.log(err)
