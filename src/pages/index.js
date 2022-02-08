@@ -108,7 +108,7 @@ const addCardForm = new PopupWithForm({
             .then((result) => {
                 const newCard = new Section({}, '.elements');
                 newCard.setItem(new Card(result, userId, '.photo__template').getCard())
-                form.closePopup(true)
+                form.closePopup(true) //закрывается верно, в теле запроса
                 validation.enableValidation()
             })
             .catch((err) => {
@@ -140,7 +140,7 @@ const changeAvatarForm = new PopupWithForm({
             .then((result) => {
                 avatar.src = result.avatar
                 console.log(result)
-                form.closePopup(true)
+                form.closePopup(true) //закрывается верно, в теле запроса
                 validation.enableValidation()
             })
             .catch((err) => {
