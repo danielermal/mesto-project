@@ -12,6 +12,8 @@ import Section from '../components/Section';
 
 import { Popup } from '../components/Popup';
 
+import { PopupWithImage } from '../components/PopupWithImage';
+
 import { PopupWithForm } from '../components/PopupWithForm';
 
 import { UserInfo } from '../components/UserInfo';
@@ -37,7 +39,11 @@ api
             const cardList = new Section({
                 items: result,
                 renderer: (item) => {
-                    const card = new Card(item, userId, '.photo__template')
+                    const card = new Card(item, userId, '.photo__template', {
+                      handleCardClick: (link, name, card) => {
+                        const cardPopup = new PopupWithImage(link, name, card, '.popup_photo').openPopup()
+                      }
+                    })
                     const cardElement = card.getCard()
                     cardList.setItem(cardElement)
                 }
@@ -124,7 +130,11 @@ const addCardForm = new PopupWithForm({
         api.addNewCard(values[0], values[1])
             .then((result) => {
                 const newCard = new Section({}, '.elements');
-                newCard.setItem(new Card(result, userId, '.photo__template').getCard())
+                newCard.setItem(new Card(result, userId, '.photo__template', {
+                  handleCardClick: (link, name, card) => {
+                    const cardPopup = new PopupWithImage(link, name, card, '.popup_photo').openPopup()
+                  }
+                }).getCard())
                 form.closePopup(true) //закрывается верно, в теле запроса
                     //validation.enableValidation()
             })
