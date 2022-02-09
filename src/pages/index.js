@@ -113,6 +113,8 @@ const changeProfileForm = new PopupWithForm({
         popupChangeProfile.renderLoading(true, 'Сохранение')
         const values = popupChangeProfile.getInputValues()
         console.log(values)
+        validProfile.removeValidErrors();
+        validProfile.disableSubmitButton();
         api.changeProfile(values.name, values.hobbie)
         .then((result) => {
           new UserInfo({
@@ -144,6 +146,8 @@ const addCardForm = new PopupWithForm({
         popupCard.renderLoading(true, 'Создание')
         const values = popupCard.getInputValues()
         console.log(values)
+        validAddCard.removeValidErrors();
+        validAddCard.disableSubmitButton();
         api.addNewCard(values.place, values.link)
             .then((result) => {
                 const newCard = new Section({}, '.elements');
@@ -177,6 +181,8 @@ const changeAvatarForm = new PopupWithForm({
         popupChangeAvatar.renderLoading(true, 'Сохранение')
         const values = popupChangeAvatar.getInputValues()
         console.log(values)
+        validAvatar.removeValidErrors();
+        validAvatar.disableSubmitButton();
         api.changeAvatar(values.avatar)
             .then((result) => {
                 avatar.src = result.avatar
