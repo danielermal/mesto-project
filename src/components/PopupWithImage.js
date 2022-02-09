@@ -1,18 +1,16 @@
 import { Popup } from "./Popup";
 
 export class PopupWithImage extends Popup {
-    constructor(popupImage, popupImageTitle, card, popupSelector) {
+    constructor(popupImage, popupImageTitle, popupSelector) {
         super(popupSelector)
         this.popupImage = popupImage
         this.popupImageTitle = popupImageTitle
-        this.title = card.name
-        this.src = card.link
     }
 
-    openPopup() {
-        this.popupImage.src = this.src
-        this.popupImage.alt = this.title
-        this.popupImageTitle.textContent = this.title
+    openPopup(card) {
+        this.popupImage.src = card.link
+        this.popupImage.alt = card.name
+        this.popupImageTitle.textContent = card.name
         super.openPopup()
     }
 }

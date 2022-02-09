@@ -1,13 +1,11 @@
 export const editButton = document.querySelector('.profile__edit');
 export const addButton = document.querySelector('.profile__add-button');
 export const changeAvatarButton = document.querySelector('.profile__img-overlay')
-export const popupImage = document.querySelector('.popup__image')
-export const popupImageTitle = document.querySelector('.popup__image-title')
 export const avatar = document.querySelector('.profile__img')
 export const popupAddCard = document.querySelector('.popup_add-photo');
 export const popupEditProfile = document.querySelector('.popup_profile');
 export const popupEditAvatar = document.querySelector('.popup_change-avatar');
-/*Конфиг Данила
+
 export const config = {
     baseUrl: 'https://nomoreparties.co/v1/plus-cohort-5',
     headers: {
@@ -15,15 +13,15 @@ export const config = {
         'Content-Type': 'application/json; charset=UTF-8'
     }
 }
-*/
+
 /*Конфиг Вадима */
-export const config = {
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-4',
-    headers: {
-        authorization: '69b55c42-ee88-4348-a639-420f0f40fb4f',
-        'Content-Type': 'application/json'
-    }
-};
+// export const config = {
+//     baseUrl: 'https://nomoreparties.co/v1/plus-cohort-4',
+//     headers: {
+//         authorization: '69b55c42-ee88-4348-a639-420f0f40fb4f',
+//         'Content-Type': 'application/json'
+//     }
+// };
 export const validConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__text-input',
@@ -31,3 +29,4 @@ export const validConfig = {
     validInactiveButton: 'popup__save_disabled',
     validInputError: '.popup__text-input-error'
 }
+

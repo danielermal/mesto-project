@@ -1,21 +1,21 @@
 import { Popup } from "./Popup";
 
 export class PopupWithForm extends Popup {
-  constructor ({submitForm, formSelector, inputSelector, buttonTextSelector, loadingElementSelector}, popupSelector) {
+  constructor ({submitForm, inputSelector, buttonTextSelector, loadingElementSelector}, popupSelector) {
     super(popupSelector)
     this.submitForm = submitForm
-    this.form = document.querySelector(formSelector)
-    this.inputList = this.form.querySelectorAll(inputSelector)
+    this.form = this._popup.querySelector('.popup__form')
+    this._inputList = this.form.querySelectorAll(inputSelector)
     this.buttonText = this.form.querySelector(buttonTextSelector)
     this.loadingElement = this.form.querySelector(loadingElementSelector)
   }
 
   getInputValues () {
-    let values = []
-    this.inputList.forEach(item => {
-      values.push(item.value)
-    })
-    return values
+    this._formValues = {};
+    this._inputList.forEach(
+      (input) => (this._formValues[input.name] = input.value)
+    );
+    return this._formValues
   }
 
   setEventListeners () {
@@ -26,11 +26,8 @@ export class PopupWithForm extends Popup {
   closePopup (status) {
     if (status) {
       this.form.reset()
-      super.closePopup()
     }
-    else {
-      super.closePopup()
-    }
+    super.closePopup()
   }
 
   renderLoading (status, text) {

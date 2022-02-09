@@ -1,13 +1,12 @@
-import { api } from "./Api.js"
-import { PopupWithImage } from "./PopupWithImage.js"
-import { popupImage, popupImageTitle } from "../utils/constants.js";
-
 export class Card {
-    constructor(card, id, selector, {handleCardClick}) {
+    constructor(card, id, selector, {handleCardClick}, popupImageSelector, popupImageTitleSelector, api) {
         this._card = card;
         this._id = id;
         this._selector = selector;
         this._handleCardClick = handleCardClick
+        this._popupImage = document.querySelector(popupImageSelector)
+        this._popupImageTitle = document.querySelector(popupImageTitleSelector)
+        this._api = api
     }
 
     _getElement() {
@@ -32,7 +31,7 @@ export class Card {
       this._deleteCard();
       this._showLikesElement();
       this.cardImage.addEventListener('click', () => {
-        this._handleCardClick(popupImage, popupImageTitle, this._card);
+        this._handleCardClick(this._popupImage, this._popupImageTitle, this._card)
       })
     }
 
@@ -41,7 +40,7 @@ export class Card {
             this._addDeleteButton(this._createDeleteButton()).addEventListener(
                 "click",
                 () => {
-                    api
+                  this._api
                         .removeCard(this._card._id)
                         .then((res) => {
                             console.log(res);
@@ -102,7 +101,7 @@ export class Card {
 
     _showNumbersOfLikes(likeButton, showLikesElement) {
         if (!likeButton.classList.contains("element__like_active")) {
-            api
+          this._api
                 .addLike(this._card._id)
                 .then((result) => {
                     likeButton.classList.add("element__like_active");
@@ -113,7 +112,7 @@ export class Card {
                     console.log(err);
                 });
         } else {
-            api
+          this._api
                 .removeLike(this._card._id)
                 .then((result) => {
                     likeButton.classList.remove("element__like_active");
