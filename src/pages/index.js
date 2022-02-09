@@ -4,7 +4,7 @@ import { FormValidator } from '../components/FormValidator.js';
 
 import { Card } from '../components/Сard.js'
 
-import { editButton, addButton, changeAvatarButton, avatar } from '../utils/constants.js'
+import { editButton, addButton, changeAvatarButton, avatar, validConfig, popupAddCard, popupEditProfile, popupEditAvatar } from '../utils/constants.js'
 
 import { api } from '../components/Api.js'
 
@@ -12,11 +12,32 @@ import Section from '../components/Section';
 
 import { Popup } from '../components/Popup';
 
+import { PopupWithImage } from '../components/PopupWithImage';
+
 import { PopupWithForm } from '../components/PopupWithForm';
 
 import { UserInfo } from '../components/UserInfo';
 
 export let userId
+
+const popupChangeProfile = new PopupWithForm({
+  formSelector: '.popup__form_profile',
+  inputSelector: '.popup__text-input',
+  buttonTextSelector: '.popup__save-text',
+  loadingElementSelector: '.popup__loading'
+}, '.popup_profile')
+
+const popupCard = new PopupWithForm({
+  inputSelector: '.popup__text-input',
+  buttonTextSelector: '.popup__save-text',
+  loadingElementSelector: '.popup__loading'
+}, '.popup_add-photo')
+
+const popupChangeAvatar = new PopupWithForm({
+  inputSelector: '.popup__text-input',
+  buttonTextSelector: '.popup__save-text',
+  loadingElementSelector: '.popup__loading'
+}, '.popup_change-avatar')
 
 api
     .getInitialProfile()
@@ -37,7 +58,13 @@ api
             const cardList = new Section({
                 items: result,
                 renderer: (item) => {
-                    const card = new Card(item, userId, '.photo__template')
+                    const card = new Card(item, userId, '.photo__template', {
+                      handleCardClick: (link, name, card) => {
+                        const cardPopup = new PopupWithImage(link, name, '.popup_photo')
+                        cardPopup.openPopup(card)
+                        cardPopup.setEventListeners()
+                      }
+                    }, '.popup__image', '.popup__image-title', api)
                     const cardElement = card.getCard()
                     cardList.setItem(cardElement)
                 }
@@ -50,40 +77,58 @@ api
         console.log(err);
     });
 
-editButton.addEventListener('click', () => new Popup('.popup_profile').openPopup());
-addButton.addEventListener('click', () => new Popup('.popup_add-photo').openPopup());
-changeAvatarButton.addEventListener('click', () => new Popup('.popup_change-avatar').openPopup())
+editButton.addEventListener('click', () => popupChangeProfile.openPopup());
+addButton.addEventListener('click', () => popupCard.openPopup());
+changeAvatarButton.addEventListener('click', () => popupChangeAvatar.openPopup())
 
-const validation = new FormValidator({
-    formSelector: '.popup__form',
-    inputSelector: '.popup__text-input',
-    buttonSelector: '.popup__save'
-})
+// //Как мне кажется это не правильно, но для теста подойдет
+// addButton.addEventListener('click', () => {
+//     validAddCard.removeAllErrors();
+//     validAddCard.disableSubmitButton();
+//     //по правильному их надо подключить в момент открытия экземпляра попапа
+// })
 
-validation.enableValidation()
+// const validation = new FormValidator({
+//     formSelector: '.popup__form',
+//     inputSelector: '.popup__text-input',
+//     buttonSelector: '.popup__save'
+// })
 
+// validation.enableValidation()
+
+//Навешиваем Валидацию:
+//добавление карточки
+const validAddCard = new FormValidator(validConfig, popupAddCard);
+validAddCard.enableValidation();
+//профиль
+const validProfile = new FormValidator(validConfig, popupEditProfile);
+validProfile.enableValidation();
+//аватар
+const validAvatar = new FormValidator(validConfig, popupEditAvatar);
+validAvatar.enableValidation();
 // замена данных профиля при сабмите
 const changeProfileForm = new PopupWithForm({
     submitForm: (evt) => {
         evt.preventDefault()
-        const form = new PopupWithForm({
-            formSelector: '.popup__form_profile',
-            inputSelector: '.popup__text-input',
-            buttonTextSelector: '.popup__save-text',
-            loadingElementSelector: '.popup__loading'
-        }, '.popup_profile')
-        form.renderLoading(true, 'Сохранение')
-
-        new UserInfo({
+        popupChangeProfile.renderLoading(true, 'Сохранение')
+        const values = popupChangeProfile.getInputValues()
+        console.log(values)
+        api.changeProfile(values.name, values.hobbie)
+        .then((result) => {
+          new UserInfo({
             nameSelector: '.profile__title',
             aboutSelector: '.profile__subtitle',
             nameInFormSelector: '#name',
             aboutInFormSelector: '#hobbie',
-            renderLoading: () => {
-                form.closePopup(false)
-                form.renderLoading(false, 'Сохранить')
-            }
-        }).setUserInfo()
+          }).setUserInfo(result)
+          popupChangeProfile.closePopup(false)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+        .finally(() => {
+          popupChangeProfile.renderLoading(false, 'Сохранить')
+        })
     },
     formSelector: '.popup__form_profile',
     inputSelector: '.popup__text-input'
@@ -95,27 +140,28 @@ changeProfileForm.setEventListeners()
 const addCardForm = new PopupWithForm({
     submitForm: (evt) => {
         evt.preventDefault()
-        const form = new PopupWithForm({
-            formSelector: '.form__photo',
-            inputSelector: '.popup__text-input',
-            buttonTextSelector: '.popup__save-text',
-            loadingElementSelector: '.popup__loading'
-        }, '.popup_add-photo')
-        form.renderLoading(true, 'Создание')
-        const values = form.getInputValues()
+
+        popupCard.renderLoading(true, 'Создание')
+        const values = popupCard.getInputValues()
         console.log(values)
-        api.addNewCard(values[0], values[1])
+        api.addNewCard(values.place, values.link)
             .then((result) => {
                 const newCard = new Section({}, '.elements');
-                newCard.setItem(new Card(result, userId, '.photo__template').getCard())
-                form.closePopup(true) //закрывается верно, в теле запроса
-                validation.enableValidation()
+                newCard.setItem(new Card(result, userId, '.photo__template', {
+                  handleCardClick: (link, name, card) => {
+                    const cardPopup = new PopupWithImage(link, name, '.popup_photo')
+                    cardPopup.openPopup(card)
+                    cardPopup.setEventListeners()
+                  }
+                }, '.popup__image', '.popup__image-title', api).getCard())
+                popupCard.closePopup(true) //закрывается верно, в теле запроса
+                    //validation.enableValidation()
             })
             .catch((err) => {
                 console.log(err)
             })
             .finally(() => {
-                form.renderLoading(false, 'Создать')
+              popupCard.renderLoading(false, 'Создать')
             })
     },
     formSelector: '.form__photo',
@@ -127,27 +173,22 @@ addCardForm.setEventListeners()
 const changeAvatarForm = new PopupWithForm({
     submitForm: (evt) => {
         evt.preventDefault()
-        const form = new PopupWithForm({
-            formSelector: '.popup__form_avatar',
-            inputSelector: '.popup__text-input',
-            buttonTextSelector: '.popup__save-text',
-            loadingElementSelector: '.popup__loading'
-        }, '.popup_change-avatar')
-        form.renderLoading(true, 'Сохранение')
-        const values = form.getInputValues()
+
+        popupChangeAvatar.renderLoading(true, 'Сохранение')
+        const values = popupChangeAvatar.getInputValues()
         console.log(values)
-        api.changeAvatar(values[0])
+        api.changeAvatar(values.avatar)
             .then((result) => {
                 avatar.src = result.avatar
                 console.log(result)
-                form.closePopup(true) //закрывается верно, в теле запроса
-                validation.enableValidation()
+                popupChangeAvatar.closePopup(true) //закрывается верно, в теле запроса
+                    //validation.enableValidation()
             })
             .catch((err) => {
                 console.log(err)
             })
             .finally(() => {
-                form.renderLoading(false, 'Сохранить')
+              popupChangeAvatar.renderLoading(false, 'Сохранить')
             })
     },
     formSelector: '.popup__form_avatar',
