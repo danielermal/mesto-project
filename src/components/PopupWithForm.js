@@ -41,4 +41,10 @@ export class PopupWithForm extends Popup {
       this.loadingElement.classList.remove('popup__loading_active')
     }
   }
+
+  setInputValues(user) {
+    this._inputList.forEach(
+      (input) => (input.value = user[input.name])
+    );
+  }
 }
