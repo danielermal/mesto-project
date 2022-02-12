@@ -138,8 +138,8 @@ const changeProfileForm = new PopupWithForm({
           userInfo.setUserInfo({
             name: result.name,
             about: result.about,
-            avatar: user.avatar,
-            id: user.id
+            avatar: result.avatar,
+            id: result._id
           })
           user = userInfo.getUserInfo()
           popupChangeProfile.closePopup(false)
@@ -193,10 +193,10 @@ const changeAvatarForm = new PopupWithForm({
         api.changeAvatar(values.avatar)
             .then((result) => {
               userInfo.setUserInfo({
-                name: user.name,
-                about: user.about,
+                name: result.name,
+                about: result.about,
                 avatar: result.avatar,
-                id: user.id
+                id: result._id
               })
               user = userInfo.getUserInfo()
                 popupChangeAvatar.closePopup(true) //закрывается верно, в теле запроса
