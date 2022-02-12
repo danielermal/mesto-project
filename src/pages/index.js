@@ -18,16 +18,17 @@ import { UserInfo } from '../components/UserInfo';
 
 let user
 
-function handleCardClick (link, name, card) {
-  const cardPopup = new PopupWithImage(link, name, '.popup_photo')
+const cardPopup = new PopupWithImage('.popup__image', '.popup__image-title', '.popup_photo')
+cardPopup.setEventListeners()
+
+function handleCardClick (card) {
   cardPopup.openPopup(card)
-  cardPopup.setEventListeners()
 }
 
 function renderer (item) {
-  return new Card(item, user._id, '.photo__template', {
+  return new Card(item, user.id, '.photo__template', {
     handleCardClick: handleCardClick
-  }, '.popup__image', '.popup__image-title', api).getCard()
+  }, api).getCard()
 }
 
 const addCard = new Section({
@@ -62,9 +63,13 @@ api
     .getInitialProfile()
     .then((result) => {
         console.log(result);
-        const profile = userInfo.getUserInfo(result)
-        userInfo.setUserInfo()
-        user = profile;
+        userInfo.setUserInfo({
+          name: result.name,
+          about: result.about,
+          avatar: result.avatar,
+          id: result._id
+        })
+        user = userInfo.getUserInfo()
         // добавляем готовые карточки
         api.getInitialCards().then((result) => {
             console.log(result);
@@ -77,11 +82,23 @@ api
     });
 
 editButton.addEventListener('click', () => {
+  validProfile.removeValidErrors();
+  validProfile.disableSubmitButton();
   popupChangeProfile.openPopup()
   popupChangeProfile.setInputValues(user)
 });
-addButton.addEventListener('click', () => popupCard.openPopup());
-changeAvatarButton.addEventListener('click', () => popupChangeAvatar.openPopup())
+
+addButton.addEventListener('click', () => {
+  validAddCard.removeValidErrors();
+  validAddCard.disableSubmitButton();
+  popupCard.openPopup()
+});
+
+changeAvatarButton.addEventListener('click', () => {
+  validAvatar.removeValidErrors();
+  validAvatar.disableSubmitButton();
+  popupChangeAvatar.openPopup()
+})
 
 // //Как мне кажется это не правильно, но для теста подойдет
 // addButton.addEventListener('click', () => {
@@ -115,15 +132,16 @@ const changeProfileForm = new PopupWithForm({
         popupChangeProfile.renderLoading(true, 'Сохранение')
         const values = popupChangeProfile.getInputValues()
         console.log(values)
-        validProfile.removeValidErrors();
-        validProfile.disableSubmitButton();
         api.changeProfile(values.name, values.about)
         .then((result) => {
           console.log(result)
-          const profile = userInfo.getUserInfo(result)
-          user.name = profile.name
-          user.about = profile.about
-          userInfo.setUserInfo()
+          userInfo.setUserInfo({
+            name: result.name,
+            about: result.about,
+            avatar: user.avatar,
+            id: user.id
+          })
+          user = userInfo.getUserInfo()
           popupChangeProfile.closePopup(false)
           return user
         })
@@ -147,8 +165,6 @@ const addCardForm = new PopupWithForm({
         popupCard.renderLoading(true, 'Создание')
         const values = popupCard.getInputValues()
         console.log(values)
-        validAddCard.removeValidErrors();
-        validAddCard.disableSubmitButton();
         api.addNewCard(values.place, values.link)
             .then((result) => {
               addCard.setItem(result)
@@ -174,15 +190,17 @@ const changeAvatarForm = new PopupWithForm({
         popupChangeAvatar.renderLoading(true, 'Сохранение')
         const values = popupChangeAvatar.getInputValues()
         console.log(values)
-        validAvatar.removeValidErrors();
-        validAvatar.disableSubmitButton();
         api.changeAvatar(values.avatar)
             .then((result) => {
-              const profile = userInfo.getUserInfo(result)
-              userInfo.setUserInfo()
+              userInfo.setUserInfo({
+                name: user.name,
+                about: user.about,
+                avatar: result.avatar,
+                id: user.id
+              })
+              user = userInfo.getUserInfo()
                 popupChangeAvatar.closePopup(true) //закрывается верно, в теле запроса
                     //validation.enableValidation()
-              user.avatar = profile
               return user
             })
             .catch((err) => {

@@ -1,10 +1,10 @@
 import { Popup } from "./Popup";
 
 export class PopupWithImage extends Popup {
-    constructor(popupImage, popupImageTitle, popupSelector) {
+    constructor(popupImageSelector, popupImageTitleSelector, popupSelector) {
         super(popupSelector)
-        this.popupImage = popupImage
-        this.popupImageTitle = popupImageTitle
+        this.popupImage = document.querySelector(popupImageSelector)
+        this.popupImageTitle = document.querySelector(popupImageTitleSelector)
     }
 
     openPopup(card) {

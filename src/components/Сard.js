@@ -1,11 +1,9 @@
 export class Card {
-    constructor(card, id, selector, {handleCardClick}, popupImageSelector, popupImageTitleSelector, api) {
+    constructor(card, id, selector, {handleCardClick}, api) {
         this._card = card;
         this._id = id;
         this._selector = selector;
         this._handleCardClick = handleCardClick
-        this._popupImage = document.querySelector(popupImageSelector)
-        this._popupImageTitle = document.querySelector(popupImageTitleSelector)
         this._api = api
     }
 
@@ -31,7 +29,7 @@ export class Card {
       this._deleteCard();
       this._showLikesElement();
       this.cardImage.addEventListener('click', () => {
-        this._handleCardClick(this._popupImage, this._popupImageTitle, this._card)
+        this._handleCardClick(this._card)
       })
     }
 
